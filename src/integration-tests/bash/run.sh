@@ -708,8 +708,8 @@ function test_second_operator {
 #   echo Defined operator $opkey with `dom_echo_all $DOM_KEY`
 #
 function dom_define {
-    if [ "$#" != 13 ] ; then
-      fail "requires 13 parameters: DOM_KEY OP_KEY NAMESPACE DOMAIN_UID STARTUP_CONTROL WL_CLUSTER_NAME MS_BASE_NAME ADMIN_PORT ADMIN_WLST_PORT ADMIN_NODE_PORT MS_PORT LOAD_BALANCER_WEB_PORT LOAD_BALANCER_DASHBOARD_PORT"
+    if [ "$#" != 14 ] ; then
+      fail "requires 13 parameters: DOM_KEY OP_KEY NAMESPACE DOMAIN_UID STARTUP_CONTROL WL_CLUSTER_NAME MS_BASE_NAME ADMIN_PORT ADMIN_WLST_PORT ADMIN_NODE_PORT MS_PORT LOAD_BALANCER_TYPE LOAD_BALANCER_WEB_PORT LOAD_BALANCER_DASHBOARD_PORT"
     fi
     local DOM_KEY="`echo \"${1}\" | sed 's/-/_/g'`"
     eval export DOM_${DOM_KEY}_OP_KEY="$2"
@@ -722,8 +722,9 @@ function dom_define {
     eval export DOM_${DOM_KEY}_ADMIN_WLST_PORT="$9"
     eval export DOM_${DOM_KEY}_ADMIN_NODE_PORT="${10}"
     eval export DOM_${DOM_KEY}_MS_PORT="${11}"
-    eval export DOM_${DOM_KEY}_LOAD_BALANCER_WEB_PORT="${12}"
-    eval export DOM_${DOM_KEY}_LOAD_BALANCER_DASHBOARD_PORT="${13}"
+    eval export DOM_${DOM_KEY}_LOAD_BALANCER_TYPE="${12}"
+    eval export DOM_${DOM_KEY}_LOAD_BALANCER_WEB_PORT="${13}"
+    eval export DOM_${DOM_KEY}_LOAD_BALANCER_DASHBOARD_PORT="${14}"
 
     # derive TMP_DIR $USER_PROJECTS_DIR/weblogic-domains/$NAMESPACE-$DOMAIN_UID :
     eval export DOM_${DOM_KEY}_TMP_DIR="$USER_PROJECTS_DIR/weblogic-domains/$4"
