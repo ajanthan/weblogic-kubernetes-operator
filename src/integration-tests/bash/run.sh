@@ -758,6 +758,7 @@ function run_create_domain_job {
     local ADMIN_WLST_PORT="`dom_get $1 ADMIN_WLST_PORT`"
     local ADMIN_NODE_PORT="`dom_get $1 ADMIN_NODE_PORT`"
     local MS_PORT="`dom_get $1 MS_PORT`"
+    local LOAD_BALANCER_TYPE="`dom_get $1 LOAD_BALANCER_TYPE`"
     local LOAD_BALANCER_WEB_PORT="`dom_get $1 LOAD_BALANCER_WEB_PORT`"
     local LOAD_BALANCER_DASHBOARD_PORT="`dom_get $1 LOAD_BALANCER_DASHBOARD_PORT`"
     local TMP_DIR="`dom_get $1 TMP_DIR`"
@@ -823,6 +824,7 @@ function run_create_domain_job {
     if [ -n "${WEBLOGIC_IMAGE_PULL_SECRET_NAME}" ]; then
       sed -i -e "s|#weblogicImagePullSecretName:.*|weblogicImagePullSecretName: ${WEBLOGIC_IMAGE_PULL_SECRET_NAME}|g" $inputs
     fi
+    sed -i -e "s/^loadBalancer:.*/loadBalancer: $LOAD_BALANCER_TYPE/" $inputs
     sed -i -e "s/^loadBalancerWebPort:.*/loadBalancerWebPort: $LOAD_BALANCER_WEB_PORT/" $inputs
     sed -i -e "s/^loadBalancerDashboardPort:.*/loadBalancerDashboardPort: $LOAD_BALANCER_DASHBOARD_PORT/" $inputs
     sed -i -e "s/^javaOptions:.*/javaOptions: $WLS_JAVA_OPTIONS/" $inputs
@@ -2627,13 +2629,13 @@ function test_suite {
     op_define  oper1   weblogic-operator-1  "default,test1"    31001
     op_define  oper2   weblogic-operator-2  test2              32001
 
-    #          DOM_KEY  OP_KEY  NAMESPACE DOMAIN_UID STARTUP_CONTROL WL_CLUSTER_NAME MS_BASE_NAME   ADMIN_PORT ADMIN_WLST_PORT ADMIN_NODE_PORT MS_PORT LOAD_BALANCER_WEB_PORT LOAD_BALANCER_DASHBOARD_PORT
-    dom_define domain1  oper1   default   domain1    AUTO            cluster-1       managed-server 7001       30012           30701           8001    30305                  30315
-    dom_define domain2  oper1   default   domain2    AUTO            cluster-1       managed-server 7011       30031           30702           8021    30306                  30316
-    dom_define domain3  oper1   test1     domain3    AUTO            cluster-1       managed-server 7021       30041           30703           8031    30307                  30317
-    dom_define domain4  oper2   test2     domain4    AUTO            cluster-1       managed-server 7041       30051           30704           8041    30308                  30318
-    dom_define domain5  oper1   default   domain5    ADMIN           cluster-1       managed-server 7051       30061           30705           8051    30309                  30319
-    dom_define domain6  oper1   default   domain6    AUTO            cluster-1       managed-server 7061       30071           30706           8061    30310                  30320
+    #          DOM_KEY  OP_KEY  NAMESPACE DOMAIN_UID STARTUP_CONTROL WL_CLUSTER_NAME MS_BASE_NAME   ADMIN_PORT ADMIN_WLST_PORT ADMIN_NODE_PORT MS_PORT LOAD_BALANCER_TYPE LOAD_BALANCER_WEB_PORT LOAD_BALANCER_DASHBOARD_PORT
+    dom_define domain1  oper1   default   domain1    AUTO            cluster-1       managed-server 7001       30012           30701           8001    VOYAGER            30305                  30315
+    dom_define domain2  oper1   default   domain2    AUTO            cluster-1       managed-server 7011       30031           30702           8021    VOYAGER            30306                  30316
+    dom_define domain3  oper1   test1     domain3    AUTO            cluster-1       managed-server 7021       30041           30703           8031    VOYAGER            30307                  30317
+    dom_define domain4  oper2   test2     domain4    AUTO            cluster-1       managed-server 7041       30051           30704           8041    VOYAGER            30308                  30318
+    dom_define domain5  oper1   default   domain5    ADMIN           cluster-1       managed-server 7051       30061           30705           8051    VOYAGER            30309                  30319
+    dom_define domain6  oper1   default   domain6    AUTO            cluster-1       managed-server 7061       30071           30706           8061    VOYAGER            30310                  30320
 
     # create namespaces for domains (the operator job creates a namespace if needed)
     # TODO have the op_define commands themselves create target namespace if it doesn't already exist, or test if the namespace creation is needed in the first place, and if so, ask MikeG to create them as part of domain create job
